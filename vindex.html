@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zonix</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --bg-soft: #121a2b;
+        --panel: rgba(18, 26, 43, 0.8);
+        --primary: #7c3aed;
+        --secondary: #22c55e;
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --line: rgba(148, 163, 184, 0.2);
+        --shadow: rgba(124, 58, 237, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(124, 58, 237, 0.28), transparent 34%),
+          radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.18), transparent 25%),
+          var(--bg);
+        line-height: 1.6;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .container {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        backdrop-filter: blur(12px);
+        background: rgba(11, 16, 32, 0.72);
+        border-bottom: 1px solid var(--line);
+        z-index: 100;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 72px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      .brand-mark {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), #38bdf8);
+        box-shadow: 0 0 18px var(--shadow);
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        color: var(--muted);
+        font-size: 0.96rem;
+      }
+
+      .nav-links a:hover {
+        color: var(--text);
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        padding: 0.9rem 1.35rem;
+        font-weight: 700;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .button:hover {
+        transform: translateY(-2px);
+      }
+
+      .button-primary {
+        background: linear-gradient(135deg, var(--primary), #8b5cf6);
+        color: white;
+        box-shadow: 0 12px 28px rgba(124, 58, 237, 0.35);
+      }
+
+      .button-secondary {
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.02);
+        color: var(--text);
+      }
+
+      .hero {
+        padding: 96px 0 64px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.3fr 0.9fr;
+        gap: 32px;
+        align-items: center;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        font-size: 0.78rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #a78bfa;
+        margin-bottom: 18px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2.8rem, 6vw, 5rem);
+        line-height: 0.98;
+        letter-spacing: -0.06em;
+      }
+
+      .gradient-text {
+        background: linear-gradient(135deg, #c4b5fd, #7dd3fc, #86efac);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .hero p {
+        color: var(--muted);
+        font-size: 1.08rem;
+        max-width: 620px;
+        margin: 20px 0 28px;
+      }
+
+      .cta-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .metrics {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+        margin-top: 30px;
+      }
+
+      .metric strong {
+        font-size: 1.5rem;
+        display: block;
+      }
+
+      .metric span {
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .hero-card {
+        background: linear-gradient(180deg, rgba(17, 24, 39, 0.9), rgba(15, 23, 42, 0.7));
+        border: 1px solid var(--line);
+        border-radius: 26px;
+        padding: 20px;
+        box-shadow: 0 30px 70px rgba(15, 23, 42, 0.7);
+      }
+
+      .dashboard {
+        background: rgba(15, 23, 42, 0.85);
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        border-radius: 22px;
+        overflow: hidden;
+      }
+
+      .dashboard-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+      }
+
+      .traffic-dots {
+        display: flex;
+        gap: 8px;
+      }
+
+      .traffic-dots span {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+
+      .traffic-dots span:nth-child(1) { background: #ef4444; }
+      .traffic-dots span:nth-child(2) { background: #f59e0b; }
+      .traffic-dots span:nth-child(3) { background: #22c55e; }
+
+      .dashboard-body {
+        padding: 18px;
+      }
+
+      .chart {
+        height: 220px;
+        border-radius: 18px;
+        background:
+          linear-gradient(to top, rgba(124, 58, 237, 0.2), rgba(124, 58, 237, 0.02)),
+          linear-gradient(180deg, rgba(148, 163, 184, 0.08), rgba(148, 163, 184, 0.02));
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+      }
+
+      .chart svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .mini-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .mini-card {
+        padding: 14px;
+        border-radius: 14px;
+        background: rgba(148, 163, 184, 0.05);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+      }
+
+      .mini-card span {
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      .mini-card strong {
+        font-size: 1.5rem;
+        display: block;
+        margin-top: 8px;
+      }
+
+      section {
+        padding: 34px 0 84px;
+      }
+
+      .section-heading {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
+      .section-heading h2 {
+        font-size: clamp(2rem, 3vw, 3rem);
+        margin: 0 0 10px;
+        letter-spacing: -0.05em;
+      }
+
+      .section-heading p {
+        margin: 0 auto;
+        color: var(--muted);
+        max-width: 700px;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 22px;
+      }
+
+      .feature {
+        padding: 26px 22px;
+        border: 1px solid var(--line);
+        background: rgba(15, 23, 42, 0.55);
+        border-radius: 22px;
+        box-shadow: 0 16px 28px rgba(15, 23, 42, 0.2);
+      }
+
+      .icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.24), rgba(34, 197, 94, 0.16));
+        border: 1px solid rgba(167, 139, 250, 0.32);
+        margin-bottom: 18px;
+        font-size: 1.4rem;
+      }
+
+      .feature h3 {
+        margin: 0 0 10px;
+        font-size: 1.35rem;
+      }
+
+      .feature p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .cta-panel {
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(34, 197, 94, 0.1));
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        padding: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .cta-panel h3 {
+        margin: 0 0 8px;
+        font-size: clamp(1.7rem, 3vw, 2.6rem);
+        letter-spacing: -0.04em;
+      }
+
+      .cta-panel p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      footer {
+        padding: 24px 0 56px;
+        color: var(--muted);
+        text-align: center;
+        border-top: 1px solid var(--line);
+      }
+
+      @media (max-width: 900px) {
+        .hero-grid,
+        .feature-grid,
+        .cta-panel {
+          grid-template-columns: 1fr;
+          display: grid;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .cta-panel {
+          text-align: center;
+          justify-items: center;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .metrics,
+        .mini-grid {
+          grid-template-columns: 1fr;
+          display: grid;
+        }
+
+        .hero {
+          padding-top: 72px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container nav">
+        <div class="brand">
+          <span class="brand-mark"></span>
+          <span>ZONIX</span>
+        </div>
+
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="#features">Features</a>
+          <a href="#solutions">Solutions</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <a class="button button-secondary" href="#contact">Book Demo</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <span class="eyebrow">Built for modern teams</span>
+            <h1>Turn ideas into <span class="gradient-text">momentum</span>.</h1>
+            <p>
+              Zonix helps startups and growing businesses streamline operations, automate repetitive work,
+              and build experiences your customers love — all from a single, elegant platform.
+            </p>
+
+            <div class="cta-row">
+              <a class="button button-primary" href="#contact">Start Free</a>
+              <a class="button button-secondary" href="#features">Learn more</a>
+            </div>
+
+            <div class="metrics" aria-label="Business metrics">
+              <div class="metric">
+                <strong>4.9/5</strong>
+                <span>Average rating</span>
+              </div>
+              <div class="metric">
+                <strong>38%</strong>
+                <span>Faster launches</span>
+              </div>
+              <div class="metric">
+                <strong>24/7</strong>
+                <span>Workflow coverage</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-card" aria-label="Dashboard preview">
+            <div class="dashboard">
+              <div class="dashboard-top">
+                <div class="traffic-dots" aria-hidden="true">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <span>Live performance</span>
+              </div>
+
+              <div class="dashboard-body">
+                <div class="chart" aria-label="Linear graph">
+                  <svg viewBox="0 0 400 220" preserveAspectRatio="none" role="img" aria-label="Performance chart">
+                    <defs>
+                      <linearGradient id="lineGlow" x1="0" x2="1">
+                        <stop offset="0%" stop-color="#a78bfa"/>
+                        <stop offset="100%" stop-color="#34d399"/>
+                      </linearGradient>
+                    </defs>
+                    <path d="M0,190 C60,170, 80,120, 130,110 S210,85, 260,120 S330,140, 400,60" fill="none" stroke="url(#lineGlow)" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M0,190 C60,170, 80,120, 130,110 S210,85, 260,120 S330,140, 400,60 L400,220 L0,220 Z" fill="rgba(124,58,237,0.12)"/>
+                  </svg>
+                </div>
+
+                <div class="mini-grid">
+                  <div class="mini-card">
+                    <span>Revenue</span>
+                    <strong>$84k</strong>
+                  </div>
+                  <div class="mini-card">
+                    <span>Growth</span>
+                    <strong>+18.4%</strong>
+                  </div>
+                  <div class="mini-card">
+                    <span>Tasks</span>
+                    <strong>2.4k</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Everything your team needs</h2>
+            <p>
+              From automating internal workflows to creating customer-facing experiences, Zonix gives your business a powerful foundation.
+            </p>
+          </div>
+
+          <div class="feature-grid">
+            <article class="feature">
+              <div class="icon">⚡</div>
+              <h3>Automation</h3>
+              <p>Reduce repetitive tasks with intelligent workflows that help your team move faster and stay focused on growth.</p>
+            </article>
+
+            <article class="feature">
+              <div class="icon">📈</div>
+              <h3>Analytics</h3>
+              <p>Track performance, discover patterns, and make confident decisions with live reporting built for real teams.</p>
+            </article>
+
+            <article class="feature">
+              <div class="icon">🔒</div>
+              <h3>Trust & Security</h3>
+              <p>Keep your data and operations protected with enterprise-ready controls and reliable platform infrastructure.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="solutions">
+        <div class="container">
+          <div class="cta-panel">
+            <div>
+              <h3>Launch smarter. Grow faster.</h3>
+              <p>Zonix combines automation, data, and customer experience into one scalable platform.</p>
+            </div>
+            <a class="button button-primary" href="#contact">Get started</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact">
+      <div class="container">© 2026 Zonix. Built for ambitious teams.</div>
+    </footer>
+  </body>
+</html>
